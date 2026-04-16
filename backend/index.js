@@ -60,7 +60,7 @@ const IncidentSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    enum: ["Accident", "Traffic Jam", "Road Block", "Speed Issue", "Busy Road", "Other"]
+    enum: ["Accident", "Traffic Jam", "Road Block", "Speed Issue", "Busy Road", "Other", "Heavy Traffic", "Road Blocked", "Flooding", "Breakdown", "Construction"]
   },
   location: {
     type: String,
