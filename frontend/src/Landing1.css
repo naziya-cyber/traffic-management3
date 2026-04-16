@@ -1,0 +1,931 @@
+/* Smart Traffic Management - Light Professional Theme */
+/* Matches Dashboard.jsx, AlertPanel.jsx, Map.jsx styling */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Primary colors matching Dashboard theme */
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --secondary: #3b82f6;
+
+  /* Background colors */
+  --bg-main: #f8fafc;
+  --bg-white: #ffffff;
+  --bg-subtle: #f1f5f9;
+
+  /* Status colors */
+  --status-red: #ef4444;
+  --status-red-bg: #fef2f2;
+  --status-amber: #f59e0b;
+  --status-amber-bg: #fffbeb;
+  --status-green: #10b981;
+  --status-green-bg: #f0fdf4;
+
+  /* Text colors */
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  /* Border colors */
+  --border-light: #e2e8f0;
+  --border-subtle: #f1f5f9;
+
+  /* Spacing */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.main-hero {
+  min-height: 100vh;
+  background: var(--bg-white);
+  position: relative;
+  padding: 60px 24px;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  max-width: 1300px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--status-green-bg);
+  border: 1px solid #bbf7d0;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+/* Headline */
+.main-headline h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.main-headline h1 .highlight {
+  color: var(--primary);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 540px;
+}
+
+/* CTA Buttons */
+.hero-cta-group {
+  display: flex;
+  gap: 12px;
+}
+
+.cta-primary,
+.cta-secondary {
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.cta-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.cta-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.cta-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}
+
+.cta-secondary:hover {
+  background: var(--bg-subtle);
+}
+
+/* Concept Cards - Comparison */
+.concept-cards {
+  display: flex;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--bg-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.concept-side {
+  flex: 1;
+  padding: 32px;
+  text-align: center;
+}
+
+.concept-side.left {
+  background: var(--bg-subtle);
+}
+
+.concept-side.right {
+  background: var(--bg-white);
+}
+
+.concept-side h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.concept-side.active-gradient h4 {
+  color: var(--primary);
+}
+
+.hardware-icons,
+.data-icons {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.hardware-item,
+.data-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.hardware-item.disabled {
+  opacity: 0.4;
+}
+
+.hardware-item.disabled .status-icon {
+  filter: grayscale(1);
+}
+
+.status-icon,
+.icon-main {
+  font-size: 2rem;
+}
+
+.label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.divider-glow {
+  width: 1px;
+  background: var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Features Section */
+section {
+  padding: 80px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+section h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+  transform: translateY(-2px);
+}
+
+.feature-card {
+  text-align: center;
+}
+
+.feature-card span {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.feature-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Data Sources Section */
+.data-section {
+  background: var(--bg-subtle);
+}
+
+.data-section .card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.data-section .card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Architecture Section */
+.architecture-section {
+  padding: 80px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.section-header .viva-note {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+.flow-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.flow-container > * {
+  flex: 1;
+  min-width: 200px;
+}
+
+.flow-arrow {
+  font-size: 1.5rem;
+  color: var(--primary);
+  flex: 0;
+}
+
+.arch-card {
+  text-align: center;
+  position: relative;
+}
+
+.arch-card.brain {
+  background: var(--status-green-bg);
+  border-color: #bbf7d0;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.step-number {
+  background: var(--primary);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  margin: 0 auto 16px;
+}
+
+.arch-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.arch-list {
+  list-style: none;
+  padding: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.arch-list li::before {
+  content: '→ ';
+  color: var(--primary);
+}
+
+/* Footer */
+footer {
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-light);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+footer p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 40px;
+  }
+
+  .main-headline h1 {
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    margin: 0 auto 32px auto;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
+  }
+
+  .concept-cards {
+    flex-direction: column;
+  }
+
+  .divider-glow {
+    width: 100%;
+    height: 1px;
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-hero {
+    padding: 40px 16px;
+  }
+
+  section {
+    padding: 48px 16px;
+  }
+
+  .flow-container {
+    flex-direction: column;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   Traffic Scene Animation Styles
+   ============================================ */
+
+.traffic-scene {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(180deg, transparent 0%, rgba(241, 245, 249, 0.3) 100%);
+  pointer-events: none;
+}
+
+.traffic-scene__vehicle,
+.traffic-scene__vehicle-body {
+  pointer-events: auto;
+}
+
+.traffic-scene-static {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, transparent 0%, rgba(241, 245, 249, 0.5) 100%);
+}
+
+.traffic-scene-static__road {
+  position: absolute;
+  bottom: 40px;
+  left: 5%;
+  right: 5%;
+  height: 80px;
+  background: linear-gradient(90deg, #374151 0%, #1f2937 50%, #374151 100%);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.traffic-scene-static__lanes {
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #f1f5f9 0px,
+    #f1f5f9 40px,
+    transparent 40px,
+    transparent 80px
+  );
+}
+
+/* Background Layer */
+.traffic-scene__background {
+  position: absolute;
+  bottom: 120px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  z-index: 1;
+}
+
+/* Buildings */
+.traffic-scene__buildings {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+.traffic-scene__building {
+  position: absolute;
+  bottom: 0;
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+  border-radius: 4px 4px 0 0;
+  opacity: 0.4;
+  filter: blur(1px);
+}
+
+/* Trees */
+.traffic-scene__trees {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+.traffic-scene__tree {
+  position: absolute;
+  bottom: 0;
+  width: 24px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: treeSway 4s ease-in-out infinite;
+  animation-delay: calc(var(--tree-index, 0) * 0.3s);
+}
+
+.traffic-scene__tree:nth-child(even) {
+  animation-delay: calc(var(--tree-index, 0) * 0.3s + 1s);
+}
+
+.traffic-scene__tree-trunk {
+  width: 6px;
+  height: 25px;
+  background: linear-gradient(90deg, #78716c 0%, #a8a29e 50%, #78716c 100%);
+  border-radius: 2px;
+  margin-top: auto;
+}
+
+.traffic-scene__tree-top {
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 35px solid #10b981;
+  filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3));
+}
+
+@keyframes treeSway {
+  0%, 100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+/* Street Lights */
+.traffic-scene__street-lights {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  height: 60px;
+}
+
+.traffic-scene__street-light {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 50px;
+}
+
+.traffic-scene__light-pole {
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(90deg, #6b7280 0%, #9ca3af 50%, #6b7280 100%);
+  border-radius: 2px;
+}
+
+.traffic-scene__light-head {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 12px;
+  background: #4b5563;
+  border-radius: 4px 4px 2px 2px;
+}
+
+.traffic-scene__light-glow {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: lightPulse 3s ease-in-out infinite;
+}
+
+@keyframes lightPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* Road */
+.traffic-scene__road {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  perspective: 1000px;
+  z-index: 10;
+}
+
+.traffic-scene__road-surface {
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  right: 5%;
+  height: 80px;
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.traffic-scene__lanes {
+  position: absolute;
+  bottom: 40px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+}
+
+.traffic-scene__lane-marker {
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #f1f5f9 0px,
+    #f1f5f9 40px,
+    transparent 40px,
+    transparent 80px
+  );
+  animation: roadMove 2s linear infinite;
+}
+
+@keyframes roadMove {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 80px 0;
+  }
+}
+
+.traffic-scene__road-edge {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  height: 3px;
+  background: linear-gradient(90deg, #6b7280 0%, #9ca3af 50%, #6b7280 100%);
+  border-radius: 2px;
+}
+
+.traffic-scene__road-edge--top {
+  bottom: 77px;
+}
+
+.traffic-scene__road-edge--bottom {
+  bottom: 37px;
+}
+
+/* Vehicles */
+.traffic-scene__vehicle {
+  position: absolute;
+  bottom: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.traffic-scene__vehicle:hover {
+  transform: scale(1.05) !important;
+}
+
+.traffic-scene__vehicle-body {
+  position: relative;
+  border-radius: 4px 6px 3px 3px;
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.traffic-scene__vehicle-windows {
+  display: flex;
+  gap: 3px;
+  padding: 3px 4px;
+}
+
+.traffic-scene__vehicle-window {
+  height: 8px;
+  background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.8;
+}
+
+.traffic-scene__vehicle-wheels {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.traffic-scene__vehicle-wheel {
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #374151 40%, #1f2937 100%);
+  border-radius: 50%;
+  animation: wheelSpin 0.5s linear infinite;
+}
+
+@keyframes wheelSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Traffic State Indicator */
+.traffic-scene__vehicle-indicator {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.traffic-scene__vehicle-indicator-light {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: indicatorPulse 1.5s ease-in-out infinite;
+}
+
+.traffic-scene__vehicle-indicator--smooth .traffic-scene__vehicle-indicator-light {
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.traffic-scene__vehicle-indicator--moderate .traffic-scene__vehicle-indicator-light {
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b;
+}
+
+.traffic-scene__vehicle-indicator--heavy .traffic-scene__vehicle-indicator-light {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+@keyframes indicatorPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Vehicle Shadow */
+.traffic-scene__vehicle-shadow {
+  position: absolute;
+  bottom: -8px;
+  height: 6px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+/* Tooltip */
+.traffic-scene__vehicle-tooltip {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.traffic-scene__vehicle-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #0f172a;
+}
+
+/* Foreground */
+.traffic-scene__foreground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 20;
+}
+
+.traffic-scene__roadside {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  opacity: 0.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .traffic-scene {
+    height: 220px;
+  }
+
+  .traffic-scene__road {
+    bottom: 30px;
+  }
+
+  .traffic-scene__background {
+    bottom: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .traffic-scene {
+    height: 180px;
+  }
+
+  .traffic-scene__buildings {
+    display: none;
+  }
+
+  .traffic-scene__trees {
+    display: none;
+  }
+
+  .traffic-scene__street-lights {
+    display: none;
+  }
+}
