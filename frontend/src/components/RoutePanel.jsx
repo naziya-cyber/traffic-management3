@@ -4,9 +4,9 @@
  * Shows alternate route suggestions when a road is clicked on the map.
  *
  * Data sources (in priority order):
- *   1. OpenRouteService (ORS) API — real routes with real distance & duration
- *      Requires: VITE_ORS_API_KEY in .env
- *   2. Static fallback table (used when no ORS key or API fails)
+ *   1. Backend proxy → OpenRouteService API — real routes with real distance & duration
+ *      The ORS key is stored securely in backend/.env (ORS_API_KEY)
+ *   2. Static fallback table (used when backend is unavailable or API fails)
  *
  * Also shows live incidents for the selected road from the backend.
  */
@@ -14,7 +14,7 @@
 import { useState, useEffect } from 'react'
 import { incidentsAPI } from '../api/trafficApi'
 
-const ORS_KEY = import.meta.env.VITE_ORS_API_KEY?.trim()
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 // ── Road endpoint coordinates (for ORS API routing) ──────────────────────
 // [lng, lat] format — ORS uses (longitude, latitude) order
@@ -48,8 +48,8 @@ const ROAD_ENDPOINTS = {
     end:   [77.2980, 28.6100],
   },
   'Connaught Place — Heavy Traffic': {
-    start: [77.1970, 28.6340],  // approaching Connaught Place from west
-    end:   [77.2290, 28.6300],  // exit toward east
+    start: [77.1970, 28.6340],
+    end:   [77.2290, 28.6300],
   },
   'Chandni Chowk — Heavy Traffic': {
     start: [77.2140, 28.6560],
@@ -61,7 +61,7 @@ const ROAD_ENDPOINTS = {
   },
 }
 
-// ── Static fallback routes (used if ORS key not configured or API fails) ──
+// ── Static fallback routes (used if backend/ORS unavailable) ──
 const FALLBACK_ROUTES = {
   'NH-48 — Heavy Traffic': [
     { name: 'Dwarka Expressway',     status: 'Faster', color: '#4ade80' },
@@ -85,40 +85,27 @@ const FALLBACK_ROUTES = {
   ],
 }
 
-// ── ORS API call ──────────────────────────────────────────────────────────
+// ── Backend ORS proxy call ──────────────────────────────────────────────
 async function fetchORSRoutes(start, end) {
-  if (!ORS_KEY) return null
-
-  const res = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/geojson', {
+  const res = await fetch(`${BACKEND_URL}/api/ors/routes`, {
     method: 'POST',
-    headers: {
-      'Authorization': ORS_KEY,
-      'Content-Type':  'application/json',
-      'Accept':        'application/json, application/geo+json',
-    },
-    body: JSON.stringify({
-      coordinates: [start, end],
-      alternative_routes: {
-        target_count:  2,   // request up to 2 alternatives
-        weight_factor: 1.6, // allow 60% longer weight
-        share_factor:  0.6, // routes may share up to 60% of path
-      },
-      instructions: false,
-    }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ start, end }),
   })
 
-  if (!res.ok) throw new Error(`ORS HTTP ${res.status}`)
   const json = await res.json()
+  if (!res.ok || !json.success) throw new Error(json.message || `Server ${res.status}`)
 
-  return (json.features || []).map((feature, i) => ({
+  return (json.data.features || []).map((feature, i) => ({
     name:     i === 0 ? 'Primary Route' : `Alternate ${i}`,
     time:     `${Math.round(feature.properties.summary.duration / 60)} min`,
     distance: `${(feature.properties.summary.distance / 1000).toFixed(1)} km`,
     status:   i === 0 ? 'Fastest' : 'Alternate',
     color:    i === 0 ? '#4ade80' : '#f4a261',
-    source:   'ors', // mark as real data
+    source:   'ors',
   }))
 }
+
 
 // ── Extract clean road name from the map key ────────────────────────────
 function extractRoadName(road) {
@@ -151,9 +138,9 @@ export default function RoutePanel({ road, onClose }) {
       .catch(() => setIncidents([]))
       .finally(() => setIncLoading(false))
 
-    // ── 2. Fetch real ORS routes (or fall back to static) ────────────
+    // ── 2. Fetch real ORS routes via backend proxy (or fall back to static) ─
     const endpoints = ROAD_ENDPOINTS[road]
-    if (endpoints && ORS_KEY) {
+    if (endpoints) {
       setOrsLoading(true)
       setOrsError(null)
       setRoutes([])
@@ -167,7 +154,7 @@ export default function RoutePanel({ road, onClose }) {
           }
         })
         .catch(err => {
-          console.warn('ORS failed:', err.message, '→ using static fallback')
+          console.warn('ORS proxy failed:', err.message, '→ using static fallback')
           setOrsError(err.message)
           setRoutes((FALLBACK_ROUTES[road] || FALLBACK_ROUTES.default).map(r => ({
             ...r, time: '—', distance: '—', source: 'static',
@@ -176,7 +163,7 @@ export default function RoutePanel({ road, onClose }) {
         })
         .finally(() => setOrsLoading(false))
     } else {
-      // No ORS key — use static immediately
+      // No matching endpoints — use static immediately
       setRoutes((FALLBACK_ROUTES[road] || FALLBACK_ROUTES.default).map(r => ({
         ...r, time: '—', distance: '—', source: 'static',
       })))
@@ -270,17 +257,7 @@ export default function RoutePanel({ road, onClose }) {
           </div>
         </div>
 
-        {/* ORS not configured notice */}
-        {!ORS_KEY && (
-          <div style={{
-            fontSize: '10px', color: '#64748b',
-            backgroundColor: '#16213e', borderRadius: '8px',
-            padding: '6px 10px', marginBottom: '8px',
-            border: '1px solid #2a2a3e',
-          }}>
-            💡 Add <code style={{ color: '#38bdf8' }}>VITE_ORS_API_KEY</code> to .env for real route distances and times
-          </div>
-        )}
+        {/* ORS error notice (only shown if proxy request fails) */}
 
         {/* Loading spinner */}
         {orsLoading && (

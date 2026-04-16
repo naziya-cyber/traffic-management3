@@ -735,6 +735,45 @@ app.delete("/api/admin/users/:id", authMiddleware, adminMiddleware, async (req, 
   }
 });
 
+// ── ORS Proxy — keeps the API key server-side ─────────────────────────────
+app.post("/api/ors/routes", async (req, res) => {
+  const ORS_KEY = process.env.ORS_API_KEY;
+  if (!ORS_KEY) {
+    return res.status(503).json({ success: false, message: "ORS API key not configured on server ❌" });
+  }
+  try {
+    const { start, end } = req.body;
+    if (!start || !end || start.length !== 2 || end.length !== 2) {
+      return res.status(400).json({ success: false, message: "start and end coordinates ([lng, lat]) required ❌" });
+    }
+    const orsRes = await fetch("https://api.openrouteservice.org/v2/directions/driving-car/geojson", {
+      method: "POST",
+      headers: {
+        "Authorization": ORS_KEY,
+        "Content-Type": "application/json",
+        "Accept": "application/json, application/geo+json",
+      },
+      body: JSON.stringify({
+        coordinates: [start, end],
+        alternative_routes: {
+          target_count: 2,
+          weight_factor: 1.6,
+          share_factor: 0.6,
+        },
+        instructions: false,
+      }),
+    });
+    const data = await orsRes.json();
+    if (!orsRes.ok) {
+      return res.status(orsRes.status).json({ success: false, message: data.error?.message || "ORS request failed" });
+    }
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error("ORS proxy error:", err.message);
+    res.status(500).json({ success: false, message: "ORS proxy error ❌" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.json({
     success: true,

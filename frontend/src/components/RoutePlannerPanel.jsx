@@ -3,13 +3,13 @@
  *
  * A floating route planner on the map view.
  * Users select origin + destination from Delhi locations.
- * Fetches real routes from OpenRouteService (ORS) if key is set.
- * Falls back clearly if key is missing.
+ * Fetches real routes from OpenRouteService (ORS) via the backend proxy.
+ * The ORS key lives securely in backend/.env (ORS_API_KEY).
  */
 
 import { useState } from 'react'
 
-const ORS_KEY = import.meta.env.VITE_ORS_API_KEY?.trim()
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 // ── Delhi locations with GPS coordinates [lng, lat] ──────────────────────
 // These match the roads on the map + common commute points
@@ -36,32 +36,17 @@ const LOCATIONS = {
 
 const LOCATION_NAMES = Object.keys(LOCATIONS)
 
-// ── Fetch routes from ORS ───────────────────────────────────────────────
+// ── Fetch routes via backend proxy ─────────────────────────────────────
 async function getRoutes(fromCoords, toCoords) {
-  const res = await fetch(
-    'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
-    {
-      method:  'POST',
-      headers: {
-        'Authorization': ORS_KEY,
-        'Content-Type':  'application/json',
-        'Accept':        'application/json, application/geo+json',
-      },
-      body: JSON.stringify({
-        coordinates: [fromCoords, toCoords],
-        alternative_routes: {
-          target_count:  3,   // up to 3 route options
-          weight_factor: 1.6,
-          share_factor:  0.6,
-        },
-        instructions: false,
-      }),
-    }
-  )
-  if (!res.ok) throw new Error(`ORS error ${res.status}`)
+  const res = await fetch(`${BACKEND_URL}/api/ors/routes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ start: fromCoords, end: toCoords }),
+  })
   const json = await res.json()
+  if (!res.ok || !json.success) throw new Error(json.message || `Server ${res.status}`)
 
-  return (json.features || []).map((f, i) => {
+  return (json.data.features || []).map((f, i) => {
     const { duration, distance } = f.properties.summary
     const mins = Math.round(duration / 60)
     const km   = (distance / 1000).toFixed(1)
@@ -91,7 +76,6 @@ export default function RoutePlannerPanel({ onClose }) {
   async function handleFindRoute() {
     if (!from || !to)             { setError('Please select both From and To locations.'); return }
     if (from === to)              { setError('From and To cannot be the same.'); return }
-    if (!ORS_KEY)                 { setError('ORS API key not configured. See .env setup below.'); return }
 
     setLoading(true)
     setError(null)
@@ -248,22 +232,6 @@ export default function RoutePlannerPanel({ onClose }) {
             border: '1px solid #fecaca', fontSize: '12px', color: '#dc2626',
           }}>
             ⚠️ {error}
-            {!ORS_KEY && (
-              <div style={{ marginTop: '6px', color: '#64748b', fontSize: '11px' }}>
-                Add <code style={{ backgroundColor: '#f1f5f9', padding: '1px 4px', borderRadius: '4px' }}>VITE_ORS_API_KEY=your_key</code> to your <code>.env</code> file and restart the server.
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* No ORS key hint */}
-        {!ORS_KEY && !error && (
-          <div style={{
-            marginTop: '10px', padding: '8px 12px',
-            backgroundColor: '#fffbeb', borderRadius: '8px',
-            border: '1px solid #fde68a', fontSize: '11px', color: '#92400e',
-          }}>
-            💡 <strong>ORS key not set yet.</strong> Add it to <code>.env</code> as <code>VITE_ORS_API_KEY=your_key</code> for real routes.
           </div>
         )}
       </div>
