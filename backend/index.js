@@ -749,7 +749,7 @@ app.post("/api/ors/routes", async (req, res) => {
     const orsRes = await fetch("https://api.openrouteservice.org/v2/directions/driving-car/geojson", {
       method: "POST",
       headers: {
-        "Authorization": ORS_KEY,
+        "Authorization": `Bearer ${ORS_KEY}`,
         "Content-Type": "application/json",
         "Accept": "application/json, application/geo+json",
       },
